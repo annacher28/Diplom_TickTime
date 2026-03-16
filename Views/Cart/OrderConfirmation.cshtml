@@ -1,0 +1,40 @@
+@model WatchStore.Models.Order
+
+@{
+    ViewData["Title"] = "Заказ оформлен";
+}
+
+<h1>Спасибо за заказ!</h1>
+
+<p>Ваш заказ №@Model.Id оформлен. Статус: @Model.Status</p>
+
+<h3>Состав заказа</h3>
+<table class="table">
+    <thead>
+        <tr>
+            <th>Товар</th>
+            <th>Количество</th>
+            <th>Цена</th>
+            <th>Сумма</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.OrderItems)
+        {
+            <tr>
+                <td>@item.Product.Name</td>
+                <td>@item.Quantity</td>
+                <td>@item.UnitPrice.ToString("C")</td>
+                <td>@((item.Quantity * item.UnitPrice).ToString("C"))</td>
+            </tr>
+        }
+    </tbody>
+    <tfoot>
+        <tr>
+            <td colspan="3" class="text-right"><strong>Итого:</strong></td>
+            <td><strong>@Model.TotalAmount.ToString("C")</strong></td>
+        </tr>
+    </tfoot>
+</table>
+
+<a asp-controller="Home" asp-action="Index" class="btn btn-primary">На главную</a>

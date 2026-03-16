@@ -1,0 +1,58 @@
+@model IEnumerable<WatchStore.Models.CartItem>
+
+@{
+    ViewData["Title"] = "Корзина";
+}
+
+<h1>***</h1>
+
+@if (!Model.Any())
+{
+    <p>ТОЖ ПУСТО.</p>
+}
+else
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Товар</th>
+                <th>Цена</th>
+                <th>Количество</th>
+                <th>Сумма</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>@item.Product.Name</td>
+                    <td>@item.Product.Price.ToString("C")</td>
+                    <td>
+                        <form asp-action="UpdateQuantity" method="post" style="display:inline;">
+                            <input type="hidden" name="cartItemId" value="@item.Id" />
+                            <input type="number" name="quantity" value="@item.Quantity" min="0" class="form-control" style="width:70px; display:inline;" />
+                            <button type="submit" class="btn btn-sm btn-primary">Обновить</button>
+                        </form>
+                    </td>
+                    <td>@((item.Product.Price * item.Quantity).ToString("C"))</td>
+                    <td>
+                        <form asp-action="Remove" method="post">
+                            <input type="hidden" name="cartItemId" value="@item.Id" />
+                            <button type="submit" class="btn btn-danger btn-sm">Удалить</button>
+                        </form>
+                    </td>
+                </tr>
+            }
+        </tbody>
+        <tfoot>
+            <tr>
+                <td colspan="3" class="text-right"><strong>Итого:</strong></td>
+                <td><strong>@Model.Sum(i => i.Product.Price * i.Quantity).ToString("C")</strong></td>
+                <td></td>
+            </tr>
+        </tfoot>
+    </table>
+
+    <a asp-action="Checkout" class="btn btn-success">Оформить заказ</a>
+}

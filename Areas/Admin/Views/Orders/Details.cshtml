@@ -1,0 +1,64 @@
+@model WatchStore.Models.Order
+
+@{
+    ViewData["Title"] = $"Заказ №{Model.Id}";
+}
+
+<h1>Заказ №@Model.Id</h1>
+
+<div>
+    <hr />
+    <dl class="row">
+        <dt class="col-sm-2">Пользователь</dt>
+        <dd class="col-sm-10">@(Model.User?.FullName ?? Model.User?.UserName) (@Model.User?.Email)</dd>
+
+        <dt class="col-sm-2">Дата заказа</dt>
+        <dd class="col-sm-10">@Model.OrderDate.ToString("dd.MM.yyyy HH:mm")</dd>
+
+        <dt class="col-sm-2">Статус</dt>
+        <dd class="col-sm-10">
+            <form asp-action="UpdateStatus" method="post" class="form-inline">
+                <input type="hidden" name="orderId" value="@Model.Id" />
+                <select name="status" class="form-control mr-2">
+                    <option selected>@Model.Status</option>
+                    <option>Новый</option>
+                    <option>В обработке</option>
+                    <option>Отправлен</option>
+                    <option>Доставлен</option>
+                    <option>Отменен</option>
+                </select>
+                <button type="submit" class="btn btn-primary">Изменить статус</button>
+            </form>
+        </dd>
+
+        <dt class="col-sm-2">Сумма</dt>
+        <dd class="col-sm-10">@Model.TotalAmount.ToString("C")</dd>
+    </dl>
+</div>
+
+<h3>Состав заказа</h3>
+<table class="table">
+    <thead>
+        <tr>
+            <th>Товар</th>
+            <th>Количество</th>
+            <th>Цена</th>
+            <th>Сумма</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.OrderItems)
+        {
+            <tr>
+                <td>@item.Product.Name</td>
+                <td>@item.Quantity</td>
+                <td>@item.UnitPrice.ToString("C")</td>
+                <td>@((item.Quantity * item.UnitPrice).ToString("C"))</td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<div>
+    <a asp-action="Index" class="btn btn-secondary">Назад к списку заказов</a>
+</div>

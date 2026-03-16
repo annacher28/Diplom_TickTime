@@ -1,0 +1,38 @@
+@model IEnumerable<WatchStore.Models.Product>
+
+@{
+    ViewData["Title"] = "Каталог часов";
+}
+
+<h1>И ЗДЕСЬ ПУСТО.</h1>
+
+<div class="row">
+    @foreach (var product in Model)
+    {
+        <div class="col-md-4 mb-4">
+            <div class="card">
+                <img src="@(string.IsNullOrEmpty(product.ImageUrl) ? "/images/no-image.png" : product.ImageUrl)" class="card-img-top" alt="@product.Name">
+                <div class="card-body">
+                    <h5 class="card-title">@product.Name</h5>
+                    <p class="card-text">@product.Brand</p>
+                    <p class="card-text"><strong>@product.Price.ToString("C")</strong></p>
+                    <a asp-action="Details" asp-route-id="@product.Id" class="btn btn-primary">Подробнее</a>
+                    <button class="btn btn-outline-danger btn-sm add-to-favorite" data-product-id="@product.Id">❤️</button>
+                </div>
+            </div>
+        </div>
+    }
+</div>
+
+@section Scripts {
+    <script>
+        $(document).ready(function() {
+            $('.add-to-favorite').click(function() {
+                var productId = $(this).data('product-id');
+                $.post('/Catalog/AddToFavorite', { productId: productId }, function() {
+                    alert('Товар добавлен в избранное');
+                });
+            });
+        });
+    </script>
+}
