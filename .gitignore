@@ -16,6 +16,7 @@ obj/
 *.db-wal
 
 # Visual Studio Code
+.vs/
 .vscode/
 *.code-workspace
 
