@@ -7,7 +7,7 @@ using WatchStore.Models;
 
 namespace WatchStore.Controllers
 {
-    [Authorize] // доступ только авторизованным
+    [Authorize(Roles = "User")] // доступ только авторизованным
     public class CartController : Controller
     {
         private readonly ApplicationDbContext _context;
