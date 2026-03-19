@@ -1,0 +1,83 @@
+@model WatchStore.Models.ViewModels.ProfileViewModel
+
+@{
+    ViewData["Title"] = "Личный кабинет";
+}
+
+<h1>Личный кабинет</h1>
+
+<div class="row">
+    <div class="col-md-5">
+        <div class="card mb-4">
+            <div class="card-header bg-primary text-white">
+                <h4>Информация о пользователе</h4>
+            </div>
+            <div class="card-body">
+                <table class="table table-borderless">
+                    <tr>
+                        <th>ФИО:</th>
+                        <td>@Model.FullName</td>
+                    </tr>
+                    <tr>
+                        <th>Email:</th>
+                        <td>@Model.Email</td>
+                    </tr>
+                </table>
+
+                @if (Model.IsAdmin)
+                {
+                    <div class="alert alert-info mt-3">
+                        <strong>Вы администратор</strong><br />
+                        <a asp-area="Admin" asp-controller="Products" asp-action="Index" class="btn btn-sm btn-primary mt-2">
+                            Перейти в администрирование
+                        </a>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-7">
+        <div class="card">
+            <div class="card-header bg-success text-white">
+                <h4>История заказов</h4>
+            </div>
+            <div class="card-body">
+                @if (Model.Orders.Any())
+                {
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th>№</th>
+                                <th>Дата</th>
+                                <th>Сумма</th>
+                                <th>Статус</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var order in Model.Orders)
+                            {
+                                <tr>
+                                    <td>@order.Id</td>
+                                    <td>@order.OrderDate.ToString("dd.MM.yyyy")</td>
+                                    <td>@order.TotalAmount.ToString("C")</td>
+                                    <td>@order.Status</td>
+                                    <td>
+                                        <a asp-action="OrderDetails" asp-route-id="@order.Id" class="btn btn-sm btn-info">
+                                            Подробнее
+                                        </a>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                }
+                else
+                {
+                    <p class="text-muted">У вас пока нет заказов.</p>
+                }
+            </div>
+        </div>
+    </div>
+</div>
