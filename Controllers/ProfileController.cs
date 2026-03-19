@@ -8,7 +8,7 @@ using WatchStore.Models.ViewModels;
 
 namespace WatchStore.Controllers
 {
-    [Authorize] // Доступ только авторизованным пользователям
+    [Authorize(Roles = "User")] // Доступ только для обычных пользователей (не админов)
     public class ProfileController : Controller
     {
         private readonly UserManager<ApplicationUser> _userManager;
@@ -39,7 +39,7 @@ namespace WatchStore.Controllers
                 FullName = user.FullName,
                 Email = user.Email,
                 Orders = orders,
-                IsAdmin = User.IsInRole("Admin")
+                IsAdmin = User.IsInRole("Admin") // Это может быть всегда false из-за атрибута, но оставим
             };
 
             return View(model);
